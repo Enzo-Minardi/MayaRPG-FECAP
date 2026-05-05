@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RPG Admin — Sistema de Gestão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== LOGIN / REGISTER ===== -->
+<div id="auth-screen" class="screen active">
+  <div class="auth-bg">
+    <div class="auth-blob b1"></div>
+    <div class="auth-blob b2"></div>
+    <div class="auth-blob b3"></div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="var(--accent)" stroke-width="2"/><path d="M13 20c0-3.866 3.134-7 7-7s7 3.134 7 7-3.134 7-7 7" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="20" r="3" fill="var(--accent)"/></svg>
+      </div>
+      <span>RPG<strong>Admin</strong></span>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Entrar</button>
+      <button class="auth-tab" data-tab="register">Cadastrar</button>
+    </div>
+
+    <!-- Login -->
+    <div class="auth-form active" id="form-login">
+      <div class="field-group">
+        <label>E-mail</label>
+        <input type="email" id="login-email" placeholder="seu@email.com">
+      </div>
+      <div class="field-group">
+        <label>Senha</label>
+        <input type="password" id="login-password" placeholder="••••••••">
+      </div>
+      <div class="auth-error" id="login-error"></div>
+      <button class="btn-primary full" onclick="doLogin()">Entrar</button>
+    </div>
+
+    <!-- Register -->
+    <div class="auth-form" id="form-register">
+      <div class="fields-row">
+        <div class="field-group">
+          <label>Nome completo</label>
+          <input type="text" id="reg-name" placeholder="Maya Silva">
+        </div>
+        <div class="field-group">
+          <label>Idade</label>
+          <input type="number" id="reg-age" placeholder="30">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>E-mail</label>
+        <input type="email" id="reg-email" placeholder="seu@email.com">
+      </div>
+      <div class="field-group">
+        <label>Telefone</label>
+        <input type="tel" id="reg-phone" placeholder="(11) 99999-9999">
+      </div>
+      <div class="field-group">
+        <label>Criar senha</label>
+        <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres">
+      </div>
+      <div class="field-group">
+        <label>Confirmar senha</label>
+        <input type="password" id="reg-confirm" placeholder="Repita a senha">
+      </div>
+      <div class="auth-error" id="reg-error"></div>
+      <button class="btn-primary full" onclick="doRegister()">Criar conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app-screen" class="screen">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-mark sm">
+        <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="var(--accent)" stroke-width="2"/><path d="M13 20c0-3.866 3.134-7 7-7s7 3.134 7 7-3.134 7-7 7" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="20" r="3" fill="var(--accent)"/></svg>
+      </div>
+      <span>RPG<strong>Admin</strong></span>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">
+        <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="16" r="7" fill="var(--accent-muted)"/><path d="M6 36c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="user-info">
+        <span class="user-name" id="sidebar-name">Maya</span>
+        <span class="user-role">Administração RPG</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" data-page="clients">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M3 21c0-4.418 2.686-8 6-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M16 11a4 4 0 1 1 0 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M19 21h-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Clientes
+      </button>
+      <button class="nav-item" data-page="agenda">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 2v4M16 2v4M3 10h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Agenda
+      </button>
+      <button class="nav-item" data-page="exercises">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 4v16M10 8h4M10 12h4M10 16h4M18 4v16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Exercícios
+      </button>
+      <button class="nav-item" data-page="reports">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M7 16l4-4 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Relatórios
+      </button>
+      <button class="nav-item" data-page="alerts">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Alertas
+        <span class="badge" id="alert-badge">3</span>
+      </button>
+    </nav>
+
+    <button class="nav-item logout-btn" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Sair
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ===== DASHBOARD PAGE ===== -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <p class="page-subtitle">Bem-vinda de volta,</p>
+          <h1 class="page-title" id="dash-name">Maya</h1>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" onclick="navigate('alerts')">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span class="dot"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <span class="stat-label">Novos Clientes (mês)</span>
+          <span class="stat-value" id="stat-new-clients">0</span>
+          <span class="stat-trend up">↑ este mês</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Consultas de Hoje</span>
+          <span class="stat-value" id="stat-today">0</span>
+          <span class="stat-trend">agendadas</span>
+        </div>
+        <div class="stat-card wide">
+          <span class="stat-label">Progresso Geral dos Pacientes</span>
+          <div class="sparkline">
+            <svg viewBox="0 0 200 60" preserveAspectRatio="none">
+              <polyline points="0,50 30,40 60,45 90,25 120,30 150,15 180,20 200,10" fill="none" stroke="var(--accent)" stroke-width="2"/>
+              <polyline points="0,50 30,40 60,45 90,25 120,30 150,15 180,20 200,10 200,60 0,60" fill="url(#grad)" opacity="0.3"/>
+              <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)"/><stop offset="100%" stop-color="transparent"/></linearGradient></defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="dash-col">
+          <div class="card">
+            <div class="card-header">
+              <h3>Minha Agenda de Hoje</h3>
+              <button class="text-btn" onclick="navigate('agenda')">Ver tudo →</button>
+            </div>
+            <div class="agenda-list" id="dash-agenda"></div>
+          </div>
+        </div>
+
+        <div class="dash-col-sm">
+          <div class="card">
+            <div class="card-header">
+              <h3>Alertas de Dores</h3>
+              <span class="badge-sm" id="pain-badge">0</span>
+            </div>
+            <div class="alert-list" id="dash-alerts"></div>
+          </div>
+
+          <div class="card calendar-card">
+            <div class="cal-header">
+              <button class="icon-btn-sm" onclick="prevMonth()">‹</button>
+              <span id="cal-title">Março 2026</span>
+              <button class="icon-btn-sm" onclick="nextMonth()">›</button>
+            </div>
+            <div class="cal-grid" id="calendar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CLIENTS PAGE ===== -->
+    <div class="page" id="page-clients">
+      <div class="page-header">
+        <div>
+          <p class="page-subtitle">Gestão</p>
+          <h1 class="page-title">Clientes</h1>
+        </div>
+        <button class="btn-primary" onclick="openClientModal()">+ Novo Cliente</button>
+      </div>
+
+      <div class="card">
+        <div class="table-toolbar">
+          <input type="text" class="search-input" placeholder="Buscar cliente..." oninput="filterClients(this.value)">
+          <span class="count-label" id="clients-count">0 clientes</span>
+        </div>
+        <table class="data-table" id="clients-table">
+          <thead>
+            <tr><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Idade</th><th>Status</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="clients-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== FICHA PAGE ===== -->
+    <div class="page" id="page-ficha">
+      <div class="page-header">
+        <button class="back-btn" onclick="navigate('clients')">← Clientes</button>
+        <h1 class="page-title" id="ficha-title">Ficha do Paciente</h1>
+      </div>
+
+      <div class="ficha-layout">
+        <div class="ficha-left">
+          <div class="card patient-card">
+            <div class="patient-avatar">
+              <svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="24" r="10" fill="var(--accent-muted)"/><path d="M10 54c0-11.046 8.954-20 20-20s20 8.954 20 20" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="patient-info">
+              <h2 id="ficha-patient-name">—</h2>
+              <p id="ficha-patient-email" class="muted">—</p>
+              <p id="ficha-patient-phone" class="muted">—</p>
+              <span class="status-badge" id="ficha-patient-status">Ativo</span>
+            </div>
+          </div>
+
+          <div class="ficha-tabs">
+            <button class="ftab active" data-ftab="nova">✍ Nova Ficha</button>
+            <button class="ftab" data-ftab="historico">📋 Histórico</button>
+            <button class="ftab" data-ftab="exercicios">🏋 Exercícios</button>
+          </div>
+
+          <!-- Nova Ficha -->
+          <div class="ftab-content active" id="ftab-nova">
+            <div class="card">
+              <h3>Nova Consulta</h3>
+              <div class="field-group">
+                <label>Data da consulta</label>
+                <input type="date" id="ficha-date">
+              </div>
+              <div class="field-group">
+                <label>Queixa principal</label>
+                <input type="text" id="ficha-complaint" placeholder="Ex: Dor lombar há 3 dias">
+              </div>
+              <div class="field-group">
+                <label>Região da dor</label>
+                <select id="ficha-region">
+                  <option value="">Selecionar...</option>
+                  <option>Lombar</option><option>Cervical</option><option>Torácica</option>
+                  <option>Joelho</option><option>Ombro</option><option>Quadril</option>
+                  <option>Tornozelo</option><option>Punho</option><option>Cotovelo</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label>Intensidade da dor (0–10)</label>
+                <div class="pain-slider-row">
+                  <input type="range" id="ficha-pain" min="0" max="10" value="0" oninput="updatePainLabel(this.value)">
+                  <span class="pain-label" id="pain-label">0</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <label>Notas da consulta</label>
+                <textarea id="ficha-notes" rows="5" placeholder="Descreva a evolução, posturas observadas, testes realizados..."></textarea>
+              </div>
+              <div class="field-group">
+                <label>Plano de tratamento</label>
+                <textarea id="ficha-plan" rows="3" placeholder="RPG - Cadeia posterior, 3x/semana..."></textarea>
+              </div>
+              <button class="btn-primary full" onclick="saveFicha()">Salvar Ficha</button>
+            </div>
+          </div>
+
+          <!-- Histórico -->
+          <div class="ftab-content" id="ftab-historico">
+            <div class="card">
+              <h3>Histórico de Fichas</h3>
+              <div id="ficha-history-list" class="history-list"></div>
+            </div>
+          </div>
+
+          <!-- Exercícios -->
+          <div class="ftab-content" id="ftab-exercicios">
+            <div class="card">
+              <h3>Atribuir Exercícios</h3>
+              <div class="field-group">
+                <label>Filtrar por região</label>
+                <select id="ex-filter" onchange="filterExercises(this.value)">
+                  <option value="all">Todos</option>
+                  <option value="lombar">Lombar</option>
+                  <option value="cervical">Cervical</option>
+                  <option value="joelho">Joelho</option>
+                  <option value="ombro">Ombro</option>
+                  <option value="quadril">Quadril</option>
+                  <option value="coluna">Coluna Geral</option>
+                </select>
+              </div>
+              <div class="exercise-picker" id="exercise-picker"></div>
+              <div class="field-group" id="selected-exercises-section" style="display:none">
+                <label>Exercícios selecionados</label>
+                <div id="selected-exercises-list" class="selected-ex-list"></div>
+              </div>
+              <div class="fields-row" id="ex-config" style="display:none">
+                <div class="field-group"><label>Séries</label><input type="number" id="ex-series" value="3" min="1"></div>
+                <div class="field-group"><label>Repetições</label><input type="number" id="ex-reps" value="10" min="1"></div>
+              </div>
+              <button class="btn-primary full" id="btn-designar" style="display:none" onclick="designarPlano()">Designar Plano</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== AGENDA PAGE ===== -->
+    <div class="page" id="page-agenda">
+      <div class="page-header">
+        <div>
+          <p class="page-subtitle">Sincronizado com app</p>
+          <h1 class="page-title">Agenda</h1>
+        </div>
+        <span class="sync-badge">📱 App Android</span>
+      </div>
+
+      <div class="agenda-layout">
+        <div class="card agenda-calendar-card">
+          <div class="cal-header">
+            <button class="icon-btn-sm" onclick="prevMonthAgenda()">‹</button>
+            <span id="agenda-cal-title">Março 2026</span>
+            <button class="icon-btn-sm" onclick="nextMonthAgenda()">›</button>
+          </div>
+          <div class="cal-grid" id="agenda-calendar"></div>
+        </div>
+
+        <div class="agenda-day-panel">
+          <div class="card">
+            <h3 id="agenda-day-title">Hoje</h3>
+            <div class="agenda-appointments" id="agenda-day-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== EXERCISES PAGE ===== -->
+    <div class="page" id="page-exercises">
+      <div class="page-header">
+        <div>
+          <p class="page-subtitle">Biblioteca</p>
+          <h1 class="page-title">Exercícios</h1>
+        </div>
+        <button class="btn-primary" onclick="openExerciseModal()">+ Novo Exercício</button>
+      </div>
+
+      <div class="exercises-layout">
+        <div class="ex-sidebar card">
+          <h3>Categorias</h3>
+          <div class="category-list" id="category-list"></div>
+        </div>
+        <div class="ex-main">
+          <div class="card">
+            <div class="table-toolbar">
+              <input type="text" class="search-input" placeholder="Buscar exercício..." oninput="filterExLib(this.value)">
+            </div>
+            <div class="ex-grid" id="ex-library-grid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORTS PAGE ===== -->
+    <div class="page" id="page-reports">
+      <div class="page-header">
+        <div>
+          <p class="page-subtitle">Análises</p>
+          <h1 class="page-title">Relatórios</h1>
+        </div>
+      </div>
+      <div class="reports-grid">
+        <div class="card report-card">
+          <h3>Pacientes por Status</h3>
+          <div class="donut-chart">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="var(--surface-2)" stroke-width="20"/>
+              <circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="20" stroke-dasharray="188 125" stroke-dashoffset="-31" stroke-linecap="round"/>
+              <circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent-2)" stroke-width="20" stroke-dasharray="80 233" stroke-dashoffset="-219" stroke-linecap="round"/>
+            </svg>
+            <div class="donut-legend">
+              <div><span class="dot-a"></span> Ativos</div>
+              <div><span class="dot-c"></span> Concluídos</div>
+            </div>
+          </div>
+        </div>
+        <div class="card report-card">
+          <h3>Regiões mais tratadas</h3>
+          <div class="bar-chart" id="region-chart"></div>
+        </div>
+        <div class="card report-card wide">
+          <h3>Consultas por mês</h3>
+          <div class="line-chart-wrap">
+            <svg viewBox="0 0 500 120" preserveAspectRatio="none" id="monthly-chart">
+              <polyline points="0,100 60,80 120,60 180,70 240,40 300,50 360,30 420,45 480,20" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ALERTS PAGE ===== -->
+    <div class="page" id="page-alerts">
+      <div class="page-header">
+        <div>
+          <p class="page-subtitle">Notificações</p>
+          <h1 class="page-title">Alertas</h1>
+        </div>
+        <button class="text-btn" onclick="clearAlerts()">Marcar todas como lidas</button>
+      </div>
+      <div class="alerts-list" id="alerts-full-list"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ===== MODALS ===== -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()" id="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
